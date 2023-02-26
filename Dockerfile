@@ -1,8 +1,8 @@
 FROM golang:1.20.1-alpine3.17 AS BuildStage
 
-#COPY go.mod ./
+COPY sources/go.mod ./
 
-COPY go.sum ./
+COPY sources/go.sum ./
 
 RUN go mod download
 
