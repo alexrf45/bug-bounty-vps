@@ -1,6 +1,6 @@
 FROM golang:1.20.1-alpine3.17 AS BuildStage
 
-COPY go.mod ./
+#COPY go.mod ./
 
 COPY go.sum ./
 
