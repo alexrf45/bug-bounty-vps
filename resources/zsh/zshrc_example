@@ -115,3 +115,5 @@ function stop-bounty() {
 function destroy-bounty() {
 	docker container rm $NAME
 }
+
+export GOPATH=/usr/local/bin/go

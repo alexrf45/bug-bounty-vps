@@ -1,0 +1,44 @@
+function bounty() {
+	dirname=${PWD##*/}
+	if [ ! -d `pwd`/.logs ];
+	then
+   	mkdir .logs && \
+   	docker run --name $NAME -it \
+   	--net=host --entrypoint=/bin/zsh \
+		--cap-add=NET_ADMIN \
+   	-v $HOME/.Xauthority:/root/.Xauthority:ro -v /tmp/.X11-unix:/tmp/.X11-unix \
+    -e DISPLAY=$DISPLAY \
+		-e NAME=$NAME \
+		-e TARGET=$TARGET \
+		-e IP=$IP \
+		-e DOMAIN=$DOMAIN \
+    -e TZ=America/New_York \
+   	-v `pwd`/.logs:/root/.logs:rw -v `pwd`:/${dirname} \
+   	-w /${dirname} fonalex45/bounty:latest
+	else
+		docker run --name $NAME -it \
+		--net=host --entrypoint=/bin/zsh \
+		--cap-add=NET_ADMIN \
+		-v $HOME/.Xauthority:/root/.Xauthority:ro -v /tmp/.X11-unix:/tmp/.X11-unix \
+    -e DISPLAY=$DISPLAY \
+		-e NAME=$NAME \
+		-e TARGET=$TARGET \
+		-e IP=$IP \
+		-e DOMAIN=$DOMAIN \
+    -e TZ=America/New_York \
+		-v `pwd`/.kali-logs:/root/.logs:rw -v `pwd`:/${dirname} \
+		-w /${dirname} fonalex45/bounty:latest
+	fi
+}
+
+function enter-bounty() {
+	docker exec -it $NAME /bin/zsh
+}
+
+function stop-bounty() {
+	docker container stop $NAME
+}
+
+function destroy-bounty() {
+	docker container rm $NAME
+}

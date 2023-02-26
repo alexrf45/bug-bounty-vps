@@ -1,0 +1,42 @@
+onesixtyone 192.168.10.10 private
+onesixtyone 192.168.10.10 public
+onesixtyone 192.168.10.10 manager
+onesixtyone -c /usr/share/metasploit-framework/data/wordlists/snmp_default_pass.txt 192.168.10.10
+snmpwalk -c public -v 1 192.168.10.10
+snmpwalk -c public -v 2c 192.168.10.10
+cewl --depth 10 --with-numbers --write cewl.txt 192.168.10.10
+wpscan --api-token APITOKEN --url "http://$TARGET/" --no-banner --plugins-version-detection passive --password-attack xmlrpc -U 'admin' -P /usr/share/seclists/Passwords/darkweb2017-top1000.txt
+wpscan --api-token APITOKEN --url "http://$TARGET/" --no-banner --plugins-detection aggressive
+wpscan --api-token APITOKEN --url "http://$TARGET/" --no-banner --enumerate u1-20
+nikto -host 192.168.10.10
+rlwrap nc -lvnp 1337
+ffuf -fs 185 -c -w `fzf-wordlists` -H 'Host: FUZZ.machine.org' -u "http://$TARGET/"
+ffuf -fs 185 -c -w `fzf-wordlists` -H 'Host: FUZZ.org' -u "http://$TARGET/"
+ffuf -c -w /usr/share/seclists/Discovery/Web-Content/common.txt -e .php,.txt,.pl,.sh,.asp,.aspx,.html,.json,.py,.cfm,.rb,.cgi,.bak,.tar.gz,.tgz,.zip -u "http://$TARGET/FUZZ" -t 10 -p 0.2 -mc 200 -fs 0
+ffuf -c -w /usr/share/seclists/Discovery/Web-Content/raft-large-words-lowercase.txt -u "http://$TARGET/FUZZ" --extract-links
+ffuf -c -w /usr/share/seclists/Discovery/DNS/subdomains-top1million-110000.txt -u "http://$TARGET/" -H "HOST:FUZZ.$TARGET"
+echo "http://$TARGET/" | hakrawler -d 10
+ngrok authtoken AUTHTOKEN:::https://dashboard.ngrok.com/get-started/your-authtoken
+# -=-=-=-=-=-=-=- YOUR COMMANDS BELOW -=-=-=-=-=-=-=- #
+whatweb http://$IP/
+whatweb https://$IP/
+whatweb -a 1 -U=$AGENT -t 10 --wait=0.2 http://$IP/
+rlwrap nc -nvlp $PORT
+logfile $TARGET
+export AGENT='Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/108.0.0.0 Safari/537.36'
+ffuf -c -t 30 -p 0.1 -H "User-Agent: $AGENT" -ac -o $NAME.txt -of html -w /usr/share/seclists/Discovery/Web-Content/common.txt -u http://$DOMAIN/FUZZ
+ffuf -c -t 40 -p 0.1 -o $NAME_domains.txt -of html -H "Host:FUZZ.$DOMAIN" -w /usr/share/seclists/Discovery/DNS/subdomains-top1million-110000.txt -u http://$DOMAIN/
+nc -nvlp
+./chisel server -p 8000 --reverse
+nmap -sC -sV -oA $NAME-nmap/$NAME -p- $IP
+ffuf -c -t 50 -p 0.1 -H "User-Agent: $AGENT" -r -ac -o $NAME.txt -of html -mc 200,302,403 -w /usr/share/seclists/Discovery/Web-Content/raft-small-words.txt -u http://$DOMAIN/FUZZ
+export IP=
+export TARGET=
+export DOMAIN=
+export NAME=
+export USER=
+mysql $IP -u $USER -p
+python3 cloud_enum.py
+go-dork -q "inurl:'...'"
+naabu -host $DOMAIN
+
