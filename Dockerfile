@@ -1,15 +1,3 @@
-FROM golang:1.20.1-alpine3.17 AS BuildStage
-
-COPY sources/go.mod ./
-
-COPY sources/go.sum ./
-
-RUN go mod download
-
-COPY *.go ./
-
-RUN go build -o /hakrawler
-
 FROM kalilinux/kali-rolling:latest
 
 ENV DEBIAN_FRONTEND noninteractive
@@ -53,7 +41,9 @@ RUN sudo chmod +x /home/bounty/sources/packages.sh && \
 RUN sudo chmod +x /home/bounty/sources/go.sh \
 	&& /home/bounty/sources/go.sh install_go
 
-COPY --from=BuildStage /hakrawler /home/bounty/.local/hakrawler 
+COPY sources/hakrawler /home/bounty/.local/bin/hakrawler
+
+RUN sudo chmod +x /home/bounty/.local/bin/hakrawler
 
 RUN sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" \
 	--unattended

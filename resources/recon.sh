@@ -65,6 +65,9 @@ tool_banner() {
 }
 
 amass_run () {
+    echo -e "${BOLDRED}gathering intel on $domain ${ENDCOLOR}\n"
+    amass intel -d $domain -whois -o whois.txt
+    echo -e "${BOLDGREEN}Amass intel complete${ENDCOLOR}\n"
     echo -e "${BOLDRED}searching for $domain ${ENDCOLOR}\n"
     amass enum -config ~/.config/amass/config.ini -o domains.txt -d $domain
     echo -e "${BOLDGREEN}Amass subdomain enum complete${ENDCOLOR}\n"

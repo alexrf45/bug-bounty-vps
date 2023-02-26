@@ -55,7 +55,7 @@ source $ZSH/oh-my-zsh.sh
 
 #Custom ENV
 export EDITOR=vim
-export PATH=$PATH:/home/bounty/bin:/usr/local/go/bin:/home/bounty/.local
+export PATH=$PATH:$HOME/bin:/usr/local/go/bin:$HOME/.local:$HOME/.local/bin
 
 #daily drivers for day to day tasks
 alias http='python3 -m http.server 80'
