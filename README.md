@@ -6,13 +6,68 @@
 
 Simple vps for running bug bounty workloads
 
-## TODO:
-[x] move more binaries to other build stages - removed build stage
+## Local Container usage:
 
-[ ] continue development of recon.sh
+```bash
+$ git clone https://github.com/alexrf45/bug-bounty-vps.git
 
-[x] publish image
+$ cd bug-bounty-vps/
 
-[ ]  port over terraform code
+$ docker build -t bounty:local .
 
-[ ]  gitignore terraform
+$ cat functions >> .zshrc or .bashrc
+
+$ source ~/.zshrc
+
+$ export NAME=target #substitute target for domain or company
+
+$ mkdir -p $NAME & cd $NAME
+
+$ bounty
+
+```
+
+## VPS
+
+```bash
+$ git clone https://github.com/alexrf45/bug-bounty-vps.git
+
+$ ssh-keygen -t rsa -C "bug" -f ~/.ssh/jump
+
+$ cd bug-bounty-vps/vps/live
+
+$ terraform init
+
+$ terraform plan -out=test
+
+$ terraform apply "test"
+
+```
+
+- After 5 minutes, ssh into the VPS: 
+
+```bash
+
+$ terraform output #jot down the public IP address
+
+$ export IP=xxx.xxx.xxx.xxx
+
+$ ssh -i ~/.ssh/jump ubuntu@$IP
+
+# (optional) in the vps launch tmux
+$ t test
+
+$ export NAME=target #substitute target for domain or company
+
+$ mkdir -p $NAME & cd $NAME
+
+$ bounty
+
+```
+## Recon.sh
+
+```bash
+#multiple domains can be specified. please copy, via scp, a amass config.ini w/ api keys to the vps before running
+
+recon.sh -p PROJECTNAME -d DOMAIN
+```
