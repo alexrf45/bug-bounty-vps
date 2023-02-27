@@ -90,11 +90,6 @@ naabu_httpx_live () {
   naabu -list live-hosts.txt | http-x -list live-hosts.txt -silent -probe -tech-detect -status-code > probed-hosts.txt
 }
 
-httpx_live () {
-    echo -e "${BOLDRED} probing hosts with httpx...${ENDCOLOR}"
-    http-x -list live-hosts.txt -silent -probe -tech-detect -status-code > probed-hosts.txt
-
-}
 file_format(){
     echo -e "${BOLDYELLOW}Formatting httpx results${ENDCOLOR}\n"
     cat probed-hosts.txt | grep 'SUCCESS' | cut -d '[' -f 1 > targets.txt
@@ -131,7 +126,7 @@ tool_banner "Running naabu & httpx"
 naabu_httpx_live
 tool_banner "Formatting httpx results"
 file_format
-tool_banner "Httpx complete"
+tool_banner "Httpx & Naabu complete"
 tool_banner "Running hakrawler"
 hakrawler
 tool_banner "hakrawler complete"
