@@ -43,6 +43,8 @@ RUN sudo chmod +x /home/bounty/sources/go.sh \
 
 COPY sources/hakrawler /home/bounty/.local/bin/hakrawler
 
+RUN git clone https://github.com/initstring/cloud_enum.git
+
 RUN sudo chmod +x /home/bounty/.local/bin/hakrawler
 
 RUN sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" \
