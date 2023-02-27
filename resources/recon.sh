@@ -69,10 +69,10 @@ amass_run () {
     amass intel -d $domain -whois -o whois.txt
     echo -e "${BOLDGREEN}Amass intel complete${ENDCOLOR}\n"
     echo -e "${BOLDRED}searching for $domain ${ENDCOLOR}\n"
-    amass enum -config ~/.config/amass/config.ini -o domains.txt -d $domain
+    amass enum -config ~/.local/config.ini -o domains.txt -d $domain
     echo -e "${BOLDGREEN}Amass subdomain enum complete${ENDCOLOR}\n"
     echo -e "${BOLDRED}resolving IP addresses for $project...${ENDCOLOR}"
-    amass enum -config ~/.config/amass/config.ini -o ip.txt -ipv4 -d $domain
+    amass enum -config ~/.local/config.ini -o ip.txt -ipv4 -d $domain
     echo -e "${BOLDGREEN}Amass IP enum complete${ENDCOLOR}\n"
 }
 
@@ -106,12 +106,12 @@ hakrawler() {
   cat targets.txt | hakrawler -d 3 > endpoints.txt
 }
 
-spider_directories() {
-    echo -e "${BOLDRED}spidering directories${ENDCOLOR}"
-    for URL in $(<targets.txt); do ( ffuf -u "${URL}/FUZZ" \
-    -w /home/bounty/wordlists/onelistforallshort.txt \
-    -c -t 5 -p 0.3 -ac -mc 200,302,403,422,404,500,503,502 -o $NAME-ffuf.json -of json); done
-}
+#spider_directories() {
+#    echo -e "${BOLDRED}spidering directories${ENDCOLOR}"
+#   for URL in $(<targets.txt); do ( ffuf -u "${URL}/FUZZ" \
+#    -w /home/bounty/wordlists/onelistforallshort.txt \
+#   -c -t 3 -p 0.5 -ac -mc 200,302,403,422,404,500,503,502 -fs 0 -fl 0 -o $NAME-ffuf.json -of json); done
+#}
 
 nuclei_tool () {
     echo -e "${BOLDRED}running nuclei on $project${ENDCOLOR}"
@@ -135,9 +135,9 @@ tool_banner "Httpx complete"
 tool_banner "Running hakrawler"
 hakrawler
 tool_banner "hakrawler complete"
-tool_banner "Running spider"
-spider_directories
-tool_banner "Spider complete"
+#tool_banner "Running spider"
+#spider_directories
+#tool_banner "Spider complete"
 tool_banner "Running Nuclei"
 nuclei_tool
 tool_banner "Finished"
