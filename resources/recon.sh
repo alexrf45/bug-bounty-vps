@@ -103,12 +103,14 @@ hakrawler() {
   cat targets.txt | hakrawler -d 3 -t 2 -u > endpoints.txt
 }
 
-#spider_directories() {
-#    echo -e "${BOLDRED}spidering directories${ENDCOLOR}"
-#   for URL in $(<targets.txt); do ( ffuf -u "${URL}/FUZZ" \
-#    -w /home/bounty/wordlists/onelistforallshort.txt \
-#   -c -t 3 -p 0.5 -ac -mc 200,302,403,422,404,500,503,502 -fs 0 -fl 0 -o $NAME-ffuf.json -of json); done
-#}
+
+sleep 60
+
+spider_directories() {
+   for URL in $(<targets.txt); do ( ffuf -u "${URL}/FUZZ" \
+   -w /home/bounty/wordlists/onelistforallshort.txt \
+   -c -t 2 -p 0.5 -ac -mc 200,302,403,422,404,500,503,502 -fs 0 -fl 0 -o $NAME-ffuf.json -of json); done
+}
 
 nuclei_tool () {
     echo -e "${BOLDRED}running nuclei on $project${ENDCOLOR}\n"
@@ -132,6 +134,9 @@ file_format_1
 tool_banner "Running hakrawler"
 hakrawler
 tool_banner "hakrawler complete"
+tool_banner "Running Ffuf"
+spider_directories
+tool_banner "Ffuf complete"
 tool_banner "Running Nuclei"
 nuclei_tool
 tool_banner "Finished"
