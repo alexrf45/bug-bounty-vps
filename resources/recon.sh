@@ -76,29 +76,31 @@ amass_run () {
     echo -e "${BOLDGREEN}Amass IP enum complete${ENDCOLOR}\n"
 }
 
+hakrawler() {
+  cat domains.txt | hakrawler -d 3 -t 2 -u > endpoints.txt
+}
+
 waybackurls() {
   cat domains.txt | waybackurls > urls.txt
 }
 
 http_probe () {
-    echo -e "${BOLDRED}searching for live hosts on $project...${ENDCOLOR}"
+    echo -e "${BOLDRED}searching for live hosts on $project...${ENDCOLOR}\n"
     cat domains.txt | httprobe > live-hosts.txt
 }
 
 naabu_httpx_live () {
-  echo -e "${BOLDRED}probing hosts on $project...${ENDCOLOR}"
+  echo -e "${BOLDRED}probing hosts on $project...${ENDCOLOR}\n"
   naabu -list live-hosts.txt | http-x -list live-hosts.txt -silent -probe -tech-detect -status-code > probed-hosts.txt
 }
 
-file_format(){
+file_format_1(){
     echo -e "${BOLDYELLOW}Formatting httpx results${ENDCOLOR}\n"
-    cat probed-hosts.txt | grep 'SUCCESS' | cut -d '[' -f 1 > targets.txt
-
+    cat probed-hosts.txt | grep 'SUCCESS' | cut -d '[' -f 1 | cut -d ' ' -f 1 > targets.txt
 }
 
 hakrawler() {
-  echo -e "${BOLDRED} probing hosts with hakrawler...${ENDCOLOR}"
-  cat targets.txt | hakrawler -d 3 > endpoints.txt
+  cat targets.txt | hakrawler -d 3 -t 2 -u > endpoints.txt
 }
 
 #spider_directories() {
@@ -109,7 +111,7 @@ hakrawler() {
 #}
 
 nuclei_tool () {
-    echo -e "${BOLDRED}running nuclei on $project${ENDCOLOR}"
+    echo -e "${BOLDRED}running nuclei on $project${ENDCOLOR}\n"
     nuclei -t cves/ -t technologies/ -l live-hosts.txt -o nuclei-results
 }
 
@@ -119,20 +121,17 @@ amass_run
 tool_banner "Amass enumeration complete"
 tool_banner "Running waybackurls"
 waybackurls
+tool_banner "waybackurls complete"
 tool_banner "Running httprobe"
 http_probe
 tool_banner "Httprobe complete"
 tool_banner "Running naabu & httpx"
 naabu_httpx_live
 tool_banner "Formatting httpx results"
-file_format
-tool_banner "Httpx & Naabu complete"
+file_format_1
 tool_banner "Running hakrawler"
 hakrawler
 tool_banner "hakrawler complete"
-#tool_banner "Running spider"
-#spider_directories
-#tool_banner "Spider complete"
 tool_banner "Running Nuclei"
 nuclei_tool
 tool_banner "Finished"
