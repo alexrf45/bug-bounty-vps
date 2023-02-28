@@ -91,7 +91,7 @@ http_probe () {
 
 naabu_httpx_live () {
   echo -e "${BOLDRED}probing hosts on $project...${ENDCOLOR}\n"
-  naabu -list live-hosts.txt | http-x -list live-hosts.txt -silent -probe -tech-detect -status-code > probed-hosts.txt
+  naabu -list live-hosts.txt | http-x -list live-hosts.txt -silent -probe -tech-detect -status-code -t 3 > probed-hosts.txt
 }
 
 file_format_1(){
@@ -100,7 +100,7 @@ file_format_1(){
 }
 
 hakrawler() {
-  cat targets.txt | hakrawler -d 3 -t 2 -u > endpoints.txt
+  cat targets.txt | hakrawler -d 3 -t 2 -timout 5 -u > endpoints.txt &
 }
 
 nuclei_tool () {
