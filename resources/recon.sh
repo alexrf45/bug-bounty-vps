@@ -71,9 +71,6 @@ amass_run () {
     echo -e "${BOLDRED}searching for $domain ${ENDCOLOR}\n"
     amass enum -config ~/.local/config.ini -o domains.txt -d $domain
     echo -e "${BOLDGREEN}Amass subdomain enum complete${ENDCOLOR}\n"
-    echo -e "${BOLDRED}resolving IP addresses for $project...${ENDCOLOR}"
-    amass enum -config ~/.local/config.ini -o ip.txt -ipv4 -d $domain
-    echo -e "${BOLDGREEN}Amass IP enum complete${ENDCOLOR}\n"
 }
 
 hakrawler() {
@@ -100,12 +97,12 @@ file_format_1(){
 }
 
 hakrawler() {
-  cat targets.txt | hakrawler -d 3 -t 2 -timout 5 -u > endpoints.txt &
+  cat targets.txt | hakrawler -d 3 -t 2 -timeout 5 -u > endpoints.txt
 }
 
 nuclei_tool () {
     echo -e "${BOLDRED}running nuclei on $project${ENDCOLOR}\n"
-    nuclei -t cves/ -t technologies/ -l live-hosts.txt -o nuclei-results
+    nuclei -t cves/ -t technologies/ -t vulnerabilities/ -l live-hosts.txt -o nuclei-results
 }
 
 main_banner
