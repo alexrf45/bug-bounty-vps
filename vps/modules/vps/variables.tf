@@ -42,6 +42,12 @@ variable "associate_public_ip_address" {
 }
 
 
+variable "script" {
+  description = "user data for vps"
+  type        = string
+  default     = ""
+}
+
 variable "key_name" {
   description = "Name of the associated ec2 key pair"
   type        = string
